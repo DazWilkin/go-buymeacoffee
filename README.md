@@ -2,7 +2,7 @@
 
 You'll need a token that you can generate in the [Developer Dashboard](https://developers.buymeacoffee.com/dashboard)
 
-See `cmd/main.go` or `client/client_test.go` for examples
+See [`cmd/main.go`](/cmd/main.go) or [`client/client_test.go`](/client/client_test.go) for examples
 
 > **NOTE** Doesn't support [Members By ID](https://developers.buymeacoffee.com/#/apireference?id=members-by-id-v1subscriptionsid)
 
