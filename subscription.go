@@ -1,5 +1,6 @@
 package client
 
+// Status is a type that represents the possible values for the API's Subscriptions status
 type Status int
 
 const (
@@ -8,6 +9,7 @@ const (
 	All      Status = 2
 )
 
+// String is a function that converts a Status into a string
 func (s Status) String() string {
 	switch s {
 	case Active:
@@ -19,6 +21,7 @@ func (s Status) String() string {
 	}
 }
 
+// Subscriptions is a type that represents the JSON type returned by the API's subscriptions method
 type Subscriptions struct {
 	CurrentPage uint           `json:"current_page"`
 	Data        []Subscription `json:"data"`
@@ -33,6 +36,8 @@ type Subscriptions struct {
 	To          uint           `json:"to"`
 	Total       uint           `json:"total"`
 }
+
+// Subscription is a type that represents the JSON type returned by the API's subscription method
 type Subscription struct {
 	ID                 uint   `json:"subscription_id"`
 	Cancelled          string `json:"subscription_cancelled_on"`

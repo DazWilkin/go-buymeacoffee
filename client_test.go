@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// TestClientSupporters tests the client's Supporters method
 func TestClientSupporters(t *testing.T) {
 	token := os.Getenv("TOKEN")
 	c := New(token)
@@ -22,6 +23,8 @@ func TestClientSupporters(t *testing.T) {
 	}
 
 }
+
+// TestClientSupporter tests the client's Supporter method
 func TestClientSupporter(t *testing.T) {
 	token := os.Getenv("TOKEN")
 	c := New(token)
@@ -33,6 +36,8 @@ func TestClientSupporter(t *testing.T) {
 
 	log.Printf("%+v", supporter.ID)
 }
+
+// TestClientSubscriptions tests the client's Subscriptions method
 func TestClientSubscriptions(t *testing.T) {
 	token := os.Getenv("TOKEN")
 	c := New(token)

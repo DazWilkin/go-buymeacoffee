@@ -1,5 +1,6 @@
 package client
 
+// Supporters is a type that represents the JSON type returned by the API's supporters method
 type Supporters struct {
 	CurrentPage uint        `json:"current_page"`
 	Data        []Supporter `json:"data"`
@@ -14,6 +15,8 @@ type Supporters struct {
 	To          uint        `json:"to"`
 	Total       uint        `json:"total"`
 }
+
+// Supporter is a type that represents the JSON type returned by the API's supporter method
 type Supporter struct {
 	ID            uint   `json:"support_id"`
 	Node          string `json:"support_note"`
