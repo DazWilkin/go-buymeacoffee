@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	client "github.com/DazWilkin/go-buymeacoffee"
 )
@@ -10,6 +12,10 @@ import (
 func main() {
 
 	token := os.Getenv("TOKEN")
+	supporterID, err := strconv.ParseUint(os.Getenv("SUPPORTER"), 10, 32)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	c := client.New(token)
 	{
@@ -19,13 +25,11 @@ func main() {
 		}
 
 		if supporters.Data != nil {
-			for _, supporter := range supporters.Data {
-				log.Printf("%+v", supporter.ID)
-			}
+			fmt.Println(supporters.Text())
 		}
 	}
 	{
-		supporter, err := c.Supporter(1652236)
+		supporter, err := c.Supporter(uint(supporterID))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -39,9 +43,7 @@ func main() {
 		}
 
 		if subscriptions.Data != nil {
-			for _, subscription := range subscriptions.Data {
-				log.Printf("%+v", subscription.ID)
-			}
+			fmt.Println(subscriptions.Text())
 		}
 	}
 }
