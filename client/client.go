@@ -47,7 +47,7 @@ func (c *Client) Do(url string) ([]byte, error) {
 }
 
 // Subscriptions is a method that returns a list of subscriptions
-func (c *Client) Subscriptions(status types.Status) (*types.Subscriptions, error) {
+func (c *Client) Subscriptions(status types.Status) ([]types.Subscription, error) {
 	// Add Status to QueryString
 	v := xurl.Values{}
 	v.Add("status", status.String())
@@ -55,21 +55,33 @@ func (c *Client) Subscriptions(status types.Status) (*types.Subscriptions, error
 
 	url := fmt.Sprintf("%s/subscriptions?%s", base, querystring)
 
-	j, err := c.Do(url)
-	if err != nil {
-		return &types.Subscriptions{}, err
+	ss := []types.Subscription{}
+
+	// Loop at least once
+	// Until NextPageURL is null
+	for {
+		j, err := c.Do(url)
+		if err != nil {
+			return ss, err
+		}
+
+		subscriptions := &types.Subscriptions{}
+		if err := json.Unmarshal(j, subscriptions); err != nil {
+			return ss, err
+		}
+
+		ss = append(ss, subscriptions.Data...)
+
+		if subscriptions.NextPageURL == "" {
+			break
+		}
 	}
 
-	subscriptions := &types.Subscriptions{}
-	if err := json.Unmarshal(j, subscriptions); err != nil {
-		return &types.Subscriptions{}, err
-	}
-
-	return subscriptions, nil
+	return ss, nil
 }
 
 // Supporter is a method that given a supporter ID returns a supporter
-func (c *Client) Supporter(ID uint) (*types.Supporter, error) {
+func (c *Client) Supporter(ID uint) (types.Supporter, error) {
 	url := fmt.Sprintf("%s/supporters/%d", base, ID)
 
 	j, err := c.Do(url)
@@ -77,27 +89,40 @@ func (c *Client) Supporter(ID uint) (*types.Supporter, error) {
 		log.Fatal(err)
 	}
 
-	supporter := &types.Supporter{}
-	if err := json.Unmarshal(j, supporter); err != nil {
-		return &types.Supporter{}, err
+	supporter := types.Supporter{}
+	if err := json.Unmarshal(j, &supporter); err != nil {
+		return types.Supporter{}, err
 	}
 
 	return supporter, nil
 }
 
 // Supporters is a method that returns a list of supporters
-func (c *Client) Supporters() (*types.Supporters, error) {
+func (c *Client) Supporters() ([]types.Supporter, error) {
 	url := fmt.Sprintf("%s/supporters", base)
 
-	j, err := c.Do(url)
-	if err != nil {
-		log.Fatal(err)
+	// Return value
+	ss := []types.Supporter{}
+
+	// Loop at least once
+	// Until NextPageURL is null
+	for {
+		j, err := c.Do(url)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		supporters := &types.Supporters{}
+		if err := json.Unmarshal(j, supporters); err != nil {
+			return ss, err
+		}
+
+		ss = append(ss, supporters.Data...)
+
+		if supporters.NextPageURL == "" {
+			break
+		}
 	}
 
-	supporters := &types.Supporters{}
-	if err := json.Unmarshal(j, supporters); err != nil {
-		return &types.Supporters{}, err
-	}
-
-	return supporters, nil
+	return ss, nil
 }

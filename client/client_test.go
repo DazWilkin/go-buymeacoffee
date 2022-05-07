@@ -3,6 +3,7 @@ package client
 import (
 	"log"
 	"os"
+	"strconv"
 	"testing"
 
 	"github.com/DazWilkin/go-buymeacoffee/types"
@@ -18,20 +19,22 @@ func TestClientSupporters(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	if supporters.Data != nil {
-		for _, supporter := range supporters.Data {
-			log.Printf("%+v", supporter.ID)
-		}
+	for _, supporter := range supporters {
+		log.Printf("%+v", supporter.ID)
 	}
-
 }
 
 // TestClientSupporter tests the client's Supporter method
 func TestClientSupporter(t *testing.T) {
 	token := os.Getenv("TOKEN")
+	supporterID, err := strconv.ParseUint(os.Getenv("SUPPORTER"), 10, 32)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	c := New(token)
 
-	supporter, err := c.Supporter(1652236)
+	supporter, err := c.Supporter(uint(supporterID))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,9 +52,7 @@ func TestClientSubscriptions(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	if subscriptions.Data != nil {
-		for _, subscription := range subscriptions.Data {
-			log.Printf("%+v", subscription.ID)
-		}
+	for _, subscription := range subscriptions {
+		log.Printf("%+v", subscription.ID)
 	}
 }

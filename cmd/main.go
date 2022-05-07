@@ -19,14 +19,15 @@ func main() {
 	}
 
 	c := client.New(token)
+
 	{
 		supporters, err := c.Supporters()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if supporters.Data != nil {
-			fmt.Println(supporters.Text())
+		if len(supporters) != 0 {
+			fmt.Println(types.SupportersToText(supporters))
 		}
 	}
 	{
@@ -43,8 +44,8 @@ func main() {
 			log.Fatal(err)
 		}
 
-		if subscriptions.Data != nil {
-			fmt.Println(subscriptions.Text())
+		if len(subscriptions) != 0 {
+			fmt.Println(types.SubscriptionsToText(subscriptions))
 		}
 	}
 }

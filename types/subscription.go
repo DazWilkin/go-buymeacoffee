@@ -44,15 +44,15 @@ type Subscriptions struct {
 }
 
 // Text is a method that converts a slice of Supporters into tabbed output
-func (s *Subscriptions) Text() string {
+func SubscriptionsToText(ss []Subscription) string {
 	var b bytes.Buffer
 	w := tabwriter.NewWriter(&b, 0, 0, 1, ' ', 0)
 	fmt.Fprintln(w, "ID\tName\tEmail")
-	for _, subscription := range s.Data {
+	for _, s := range ss {
 		fmt.Fprintf(w, "%d\t%s\t%s\n",
-			subscription.ID,
-			subscription.PayerName,
-			subscription.PayerEmail,
+			s.ID,
+			s.PayerName,
+			s.PayerEmail,
 		)
 	}
 	if err := w.Flush(); err != nil {
