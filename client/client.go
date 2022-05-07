@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	xurl "net/url"
+
+	"github.com/DazWilkin/go-buymeacoffee/types"
 )
 
 const (
@@ -45,7 +47,7 @@ func (c *Client) Do(url string) ([]byte, error) {
 }
 
 // Subscriptions is a method that returns a list of subscriptions
-func (c *Client) Subscriptions(status Status) (*Subscriptions, error) {
+func (c *Client) Subscriptions(status types.Status) (*types.Subscriptions, error) {
 	// Add Status to QueryString
 	v := xurl.Values{}
 	v.Add("status", status.String())
@@ -55,19 +57,19 @@ func (c *Client) Subscriptions(status Status) (*Subscriptions, error) {
 
 	j, err := c.Do(url)
 	if err != nil {
-		return &Subscriptions{}, err
+		return &types.Subscriptions{}, err
 	}
 
-	subscriptions := &Subscriptions{}
+	subscriptions := &types.Subscriptions{}
 	if err := json.Unmarshal(j, subscriptions); err != nil {
-		return &Subscriptions{}, err
+		return &types.Subscriptions{}, err
 	}
 
 	return subscriptions, nil
 }
 
 // Supporter is a method that given a supporter ID returns a supporter
-func (c *Client) Supporter(ID uint) (*Supporter, error) {
+func (c *Client) Supporter(ID uint) (*types.Supporter, error) {
 	url := fmt.Sprintf("%s/supporters/%d", base, ID)
 
 	j, err := c.Do(url)
@@ -75,16 +77,16 @@ func (c *Client) Supporter(ID uint) (*Supporter, error) {
 		log.Fatal(err)
 	}
 
-	supporter := &Supporter{}
+	supporter := &types.Supporter{}
 	if err := json.Unmarshal(j, supporter); err != nil {
-		return &Supporter{}, err
+		return &types.Supporter{}, err
 	}
 
 	return supporter, nil
 }
 
 // Supporters is a method that returns a list of supporters
-func (c *Client) Supporters() (*Supporters, error) {
+func (c *Client) Supporters() (*types.Supporters, error) {
 	url := fmt.Sprintf("%s/supporters", base)
 
 	j, err := c.Do(url)
@@ -92,10 +94,10 @@ func (c *Client) Supporters() (*Supporters, error) {
 		log.Fatal(err)
 	}
 
-	supportersListResp := &Supporters{}
-	if err := json.Unmarshal(j, supportersListResp); err != nil {
-		return &Supporters{}, err
+	supporters := &types.Supporters{}
+	if err := json.Unmarshal(j, supporters); err != nil {
+		return &types.Supporters{}, err
 	}
 
-	return supportersListResp, nil
+	return supporters, nil
 }

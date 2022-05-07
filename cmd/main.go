@@ -6,7 +6,8 @@ import (
 	"os"
 	"strconv"
 
-	client "github.com/DazWilkin/go-buymeacoffee"
+	"github.com/DazWilkin/go-buymeacoffee/client"
+	"github.com/DazWilkin/go-buymeacoffee/types"
 )
 
 func main() {
@@ -37,7 +38,7 @@ func main() {
 		log.Printf("%+v", supporter.ID)
 	}
 	{
-		subscriptions, err := c.Subscriptions(client.All)
+		subscriptions, err := c.Subscriptions(types.All)
 		if err != nil {
 			log.Fatal(err)
 		}

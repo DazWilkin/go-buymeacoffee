@@ -1,4 +1,4 @@
-package client
+package types
 
 // Using the examples on the API Documentation
 // https://developers.buymeacoffee.com/#/apireference

@@ -4,6 +4,8 @@ import (
 	"log"
 	"os"
 	"testing"
+
+	"github.com/DazWilkin/go-buymeacoffee/types"
 )
 
 // TestClientSupporters tests the client's Supporters method
@@ -42,7 +44,7 @@ func TestClientSubscriptions(t *testing.T) {
 	token := os.Getenv("TOKEN")
 	c := New(token)
 
-	subscriptions, err := c.Subscriptions(All)
+	subscriptions, err := c.Subscriptions(types.All)
 	if err != nil {
 		log.Fatal(err)
 	}
