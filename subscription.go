@@ -1,5 +1,11 @@
 package client
 
+import (
+	"bytes"
+	"fmt"
+	"text/tabwriter"
+)
+
 // Status is a type that represents the possible values for the API's Subscriptions status
 type Status int
 
@@ -35,6 +41,26 @@ type Subscriptions struct {
 	PrevPageURL string         `json:"prev_page_url"`
 	To          uint           `json:"to"`
 	Total       uint           `json:"total"`
+}
+
+// Text is a method that converts a slice of Supporters into tabbed output
+func (s *Subscriptions) Text() string {
+	var b bytes.Buffer
+	w := tabwriter.NewWriter(&b, 0, 0, 1, ' ', 0)
+	fmt.Fprintln(w, "ID\tName\tEmail")
+	for _, subscription := range s.Data {
+		fmt.Fprintf(w, "%d\t%s\t%s\n",
+			subscription.ID,
+			subscription.PayerName,
+			subscription.PayerEmail,
+		)
+	}
+	if err := w.Flush(); err != nil {
+		// TODO(dazwilkin) Avoid CWE-703 unhandled error
+		return ""
+	}
+
+	return b.String()
 }
 
 // Subscription is a type that represents the JSON type returned by the API's subscription method
