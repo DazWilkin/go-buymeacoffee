@@ -23,10 +23,6 @@ func New(token string) Client {
 		client: &http.Client{},
 	}
 }
-func (c *Client) Do(rqst *http.Request) (*http.Response, error) {
-
-}
-
 func (c *Client) Subscriptions(status Status) (*Subscriptions, error) {
 	url := fmt.Sprintf("%s/subscriptions", base)
 

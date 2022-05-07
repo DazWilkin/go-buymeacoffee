@@ -3,6 +3,7 @@ package client
 type Supporters struct {
 	CurrentPage uint        `json:"current_page"`
 	Data        []Supporter `json:"data"`
+	FirstPage   string      `json:"first_page"`
 	From        uint        `json:"from"`
 	LastPage    uint        `json:"last_page"`
 	LastPageURL string      `json:"last_page_url"`
