@@ -1,18 +1,8 @@
 package types
 
 type Purchases struct {
-	CurrentPage uint       `json:"current_page"`
-	Data        []Purchase `json:"data"`
-	FirstPage   string     `json:"first_page"`
-	From        uint       `json:"from"`
-	LastPage    uint       `json:"last_page"`
-	LastPageURL string     `json:"last_page_url"`
-	NextPageURL string     `json:"next_page_url"`
-	Path        string     `json:"path"`
-	PerPage     uint       `json:"per_page"`
-	PrevPageURL string     `json:"prev_page_url"`
-	To          uint       `json:"to"`
-	Total       uint       `json:"total"`
+	Page
+	Data []Purchase `json:"data"`
 }
 type Purchase struct {
 	ID         uint   `json:"purchase_id"`

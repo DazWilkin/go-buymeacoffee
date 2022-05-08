@@ -29,18 +29,8 @@ func (s Status) String() string {
 
 // Subscriptions is a type that represents the JSON type returned by the API's subscriptions method
 type Subscriptions struct {
-	CurrentPage uint           `json:"current_page"`
-	Data        []Subscription `json:"data"`
-	FirstPage   string         `json:"first_page"`
-	From        uint           `json:"from"`
-	LastPage    uint           `json:"last_page"`
-	LastPageURL string         `json:"last_page_url"`
-	NextPageURL string         `json:"next_page_url"`
-	Path        string         `json:"path"`
-	PerPage     uint           `json:"per_page"`
-	PrevPageURL string         `json:"prev_page_url"`
-	To          uint           `json:"to"`
-	Total       uint           `json:"total"`
+	Page
+	Data []Subscription `json:"data"`
 }
 
 // Text is a method that converts a slice of Supporters into tabbed output
