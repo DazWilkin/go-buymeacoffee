@@ -3,6 +3,125 @@ package types
 // Using the examples on the API Documentation
 // https://developers.buymeacoffee.com/#/apireference
 var (
+	examplePurchase = []byte(`{
+		"purchase_id": 2621,
+		"purchased_on": "2020-08-05 09:38:26",
+		"purchase_updated_on": "2020-08-05 09:38:26",
+		"purchase_is_revoked": 0,
+		"purchase_amount": "1.00",
+		"purchase_currency": "GBP",
+		"purchase_question": "share your email?",
+		"payer_email": "quipfosssra@gmail.com",
+		"payer_name": "Quip Fora",
+		"extra": {
+		  "reward_id": 1,
+		  "reward_title": "AMA",
+		  "reward_description": "Ask me anything",
+		  "reward_confirmation_message": "Join your slot here on zoom: link",
+		  "reward_question": "share your email?",
+		  "reward_used": 3,
+		  "reward_created_on": "2020-05-19 10:09:29",
+		  "reward_updated_on": "2020-05-19 10:09:29",
+		  "reward_deleted_on": null,
+		  "reward_is_active": 1,
+		  "reward_image": "https://cdn.buymeacoffee.com/uploads/project_updates/2020/05/6cf05f963a4896bab8e377f49da20c8c.jpg",
+		  "reward_slots": 10,
+		  "reward_coffee_price": "1.00",
+		  "reward_order": 0
+		}
+	  }`)
+	examplePurchases = []byte(`{
+		"current_page": 1,
+		"data": [
+		 
+		  {
+			"purchase_id": 30,
+			"purchased_on": "2020-05-22 13:17:48",
+			"purchase_updated_on": "2020-05-22 13:17:48",
+			"purchase_is_revoked": 0,
+			"purchase_amount": "8.00",
+			"purchase_currency": "USD",
+			"purchase_question": "What is your zoom id",
+			"payer_email": "f783jksazx@privacy-mail.top",
+			"payer_name": "",
+			"extra": {
+			  "reward_id": 28,
+			  "reward_title": "Group Yoga on June 1st",
+			  "reward_description": "Join the 60-minute group yoga session where we practice Vinyasa. Beginner-friendly. ",
+			  "reward_confirmation_message": "Join using this Zoom link:&nbsp;https://us02web.zoom.us/j/89927509138Here is the link to the answer form:&nbsp;https://forms.gle/mjXCVrczAQV53UTD7Here is the link to the Make Me Laugh round:&nbsp;https://forms.gle/YX8wdLyVskiG74dbAThanks for playing!",
+			  "reward_question": "What is your zoom id?",
+			  "reward_used": 1,
+			  "reward_created_on": "2020-05-22 08:29:54",
+			  "reward_updated_on": "2020-05-22 08:29:54",
+			  "reward_deleted_on": null,
+			  "reward_is_active": 1,
+			  "reward_image": "https://cdn.buymeacoffee.com/uploads/project_updates/2020/05/5fdf77e7db86de743998100b29697265.jpg",
+			  "reward_slots": null,
+			  "reward_coffee_price": "0.00",
+			  "reward_order": 0
+			}
+		  },
+		  {
+			"purchase_id": 12,
+			"purchased_on": "2020-05-20 08:27:34",
+			"purchase_updated_on": "2020-05-20 08:27:34",
+			"purchase_is_revoked": 0,
+			"purchase_amount": "1.00",
+			"purchase_currency": "USD",
+			"purchase_question": "share your email?",
+			"payer_email": "cgtwr@gurumail.xyz",
+			"payer_name": "",
+			"extra": {
+			  "reward_id": 1,
+			  "reward_title": "AMA",
+			  "reward_description": "Ask me anything",
+			  "reward_confirmation_message": "Join your slot here on zoom: link",
+			  "reward_question": "share your email?",
+			  "reward_used": 3,
+			  "reward_created_on": "2020-05-19 10:09:29",
+			  "reward_updated_on": "2020-05-19 10:09:29",
+			  "reward_deleted_on": null,
+			  "reward_is_active": 1,
+			  "reward_image": "https://cdn.buymeacoffee.com/uploads/project_updates/2020/05/6cf05f963a4896bab8e377f49da20c8c.jpg",
+			  "reward_slots": 10,
+			  "reward_coffee_price": "1.00",
+			  "reward_order": 0
+			}
+		  }
+		],
+		"first_page_url": "https://developers.buymeacoffee.com/api/v1/extras?page=1",
+		"from": 1,
+		"last_page": 1,
+		"last_page_url": "https://developers.buymeacoffee.com/api/v1/extras?page=1",
+		"next_page_url": null,
+		"path": "https://developers.buymeacoffee.com/api/v1/extras",
+		"per_page": 5,
+		"prev_page_url": null,
+		"to": 4,
+		"total": 4
+	  }`)
+	exampleSubscription = []byte(`{
+		"subscription_id": 7979,
+		"subscription_cancelled_on": null,
+		"subscription_created_on": "2020-06-03 05:25:03",
+		"subscription_updated_on": "2020-06-03 05:25:03",
+		"subscription_current_period_start": "2020-06-03 05:25:03",
+		"subscription_current_period_end": "2025-06-03 05:25:03",
+		"subscription_coffee_price": "0.000",
+		"subscription_coffee_num": 1,
+		"subscription_is_cancelled": null,
+		"subscription_is_cancelled_at_period_end": null,
+		"subscription_currency": "USD",
+		"subscription_message": null,
+		"message_visibility": 1,
+		"subscription_duration_type": "lifetime-giveaway",
+		"referer": null,
+		"country": null,
+		"transaction_id": "GIVE_AWAY",
+		"payer_email": "rfy8jzy0yo@myinbox.icu",
+		"payer_name": "rfy8jzy0yo"
+	  }
+	  `)
 	exampleSubscriptions = []byte(`{
 		"current_page": 1,
 		"data": [
