@@ -12,3 +12,11 @@ func TestExampleSubscriptions(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+// TestExampleSubscription tests whether the API documentation's example subscription unmarshals correctly
+func TestExampleSubscription(t *testing.T) {
+	subscription := &Subscription{}
+	if err := json.Unmarshal(exampleSubscription, subscription); err != nil {
+		t.Fatal(err)
+	}
+}
