@@ -85,12 +85,12 @@ func (c *Client) Purchases() ([]types.Purchase, error) {
 
 		pp = append(pp, purchases.Data...)
 
-		if purchases.NextPageURL == "" {
+		if purchases.NextURL == "" {
 			break
 		}
 
 		// Update URL to point to the next page
-		url = purchases.NextPageURL
+		url = purchases.NextURL
 	}
 
 	return pp, nil
@@ -140,12 +140,12 @@ func (c *Client) Subscriptions(status types.Status) ([]types.Subscription, error
 
 		ss = append(ss, subscriptions.Data...)
 
-		if subscriptions.NextPageURL == "" {
+		if subscriptions.NextURL == "" {
 			break
 		}
 
 		// Update URL to point to the next page
-		url = subscriptions.NextPageURL
+		url = subscriptions.NextURL
 
 	}
 
@@ -192,12 +192,12 @@ func (c *Client) Supporters() ([]types.Supporter, error) {
 
 		ss = append(ss, supporters.Data...)
 
-		if supporters.NextPageURL == "" {
+		if supporters.NextURL == "" {
 			break
 		}
 
 		// Update URL to point to the next page
-		url = supporters.NextPageURL
+		url = supporters.NextURL
 
 	}
 
