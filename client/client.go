@@ -46,6 +46,23 @@ func (c *Client) Do(url string) ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
+// Subscription is a method that given a subscription ID returns a subscription
+func (c *Client) Subscription(ID uint) (types.Subscription, error) {
+	url := fmt.Sprintf("%s/subscription/%d", base, ID)
+
+	j, err := c.Do(url)
+	if err != nil {
+		return types.Subscription{}, err
+	}
+
+	subscription := types.Subscription{}
+	if err := json.Unmarshal(j, &subscription); err != nil {
+		return types.Subscription{}, err
+	}
+
+	return subscription, nil
+}
+
 // Subscriptions is a method that returns a list of subscriptions
 func (c *Client) Subscriptions(status types.Status) ([]types.Subscription, error) {
 	// Add Status to QueryString
