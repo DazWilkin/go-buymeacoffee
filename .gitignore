@@ -1,0 +1,5 @@
+# Environment variables w/ values
+.env.test
+
+# VSCode
+.vscode/launch.json
