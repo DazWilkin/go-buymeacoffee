@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	xurl "net/url"
 
@@ -33,31 +32,83 @@ func New(token string) Client {
 func (c *Client) Do(url string) ([]byte, error) {
 	rqst, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		log.Fatal(err)
+		return []byte{}, err
 	}
 
 	// Add Authorization
 	rqst.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token))
 	resp, err := c.client.Do(rqst)
 	if err != nil {
-		return nil, err
+		return []byte{}, err
 	}
 
 	return ioutil.ReadAll(resp.Body)
+}
+
+// Purchase is a method that given a purchase ID returns a purchase
+func (c *Client) Purchase(ID uint) (types.Purchase, error) {
+	url := fmt.Sprintf("%s/extras/%d", base, ID)
+
+	purchase := types.Purchase{}
+
+	j, err := c.Do(url)
+	if err != nil {
+		return purchase, err
+	}
+
+	if err := json.Unmarshal(j, &purchase); err != nil {
+		return purchase, err
+	}
+
+	return purchase, nil
+
+}
+
+// Purchases is a method that returns a list of purchases
+func (c *Client) Purchases() ([]types.Purchase, error) {
+	url := fmt.Sprintf("%s/extras", base)
+
+	pp := []types.Purchase{}
+
+	// Loop at least once
+	// Until NextPageURL is null
+	for {
+		j, err := c.Do(url)
+		if err != nil {
+			return pp, err
+		}
+
+		purchases := types.Purchases{}
+		if err := json.Unmarshal(j, &purchases); err != nil {
+			return pp, err
+		}
+
+		pp = append(pp, purchases.Data...)
+
+		if purchases.NextPageURL == "" {
+			break
+		}
+
+		// Update URL to point to the next page
+		url = purchases.NextPageURL
+	}
+
+	return pp, nil
 }
 
 // Subscription is a method that given a subscription ID returns a subscription
 func (c *Client) Subscription(ID uint) (types.Subscription, error) {
 	url := fmt.Sprintf("%s/subscription/%d", base, ID)
 
+	subscription := types.Subscription{}
+
 	j, err := c.Do(url)
 	if err != nil {
-		return types.Subscription{}, err
+		return subscription, err
 	}
 
-	subscription := types.Subscription{}
 	if err := json.Unmarshal(j, &subscription); err != nil {
-		return types.Subscription{}, err
+		return subscription, err
 	}
 
 	return subscription, nil
@@ -82,8 +133,8 @@ func (c *Client) Subscriptions(status types.Status) ([]types.Subscription, error
 			return ss, err
 		}
 
-		subscriptions := &types.Subscriptions{}
-		if err := json.Unmarshal(j, subscriptions); err != nil {
+		subscriptions := types.Subscriptions{}
+		if err := json.Unmarshal(j, &subscriptions); err != nil {
 			return ss, err
 		}
 
@@ -92,6 +143,10 @@ func (c *Client) Subscriptions(status types.Status) ([]types.Subscription, error
 		if subscriptions.NextPageURL == "" {
 			break
 		}
+
+		// Update URL to point to the next page
+		url = subscriptions.NextPageURL
+
 	}
 
 	return ss, nil
@@ -101,14 +156,15 @@ func (c *Client) Subscriptions(status types.Status) ([]types.Subscription, error
 func (c *Client) Supporter(ID uint) (types.Supporter, error) {
 	url := fmt.Sprintf("%s/supporters/%d", base, ID)
 
+	supporter := types.Supporter{}
+
 	j, err := c.Do(url)
 	if err != nil {
-		log.Fatal(err)
+		return supporter, err
 	}
 
-	supporter := types.Supporter{}
 	if err := json.Unmarshal(j, &supporter); err != nil {
-		return types.Supporter{}, err
+		return supporter, err
 	}
 
 	return supporter, nil
@@ -126,11 +182,11 @@ func (c *Client) Supporters() ([]types.Supporter, error) {
 	for {
 		j, err := c.Do(url)
 		if err != nil {
-			log.Fatal(err)
+			return ss, err
 		}
 
-		supporters := &types.Supporters{}
-		if err := json.Unmarshal(j, supporters); err != nil {
+		supporters := types.Supporters{}
+		if err := json.Unmarshal(j, &supporters); err != nil {
 			return ss, err
 		}
 
@@ -139,6 +195,10 @@ func (c *Client) Supporters() ([]types.Supporter, error) {
 		if supporters.NextPageURL == "" {
 			break
 		}
+
+		// Update URL to point to the next page
+		url = supporters.NextPageURL
+
 	}
 
 	return ss, nil
