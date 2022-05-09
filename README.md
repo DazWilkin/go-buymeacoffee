@@ -9,3 +9,54 @@ See [`cmd/main.go`](/cmd/main.go) or [`client/client_test.go`](/client/client_te
 <hr/>
 <br/>
 <a href="https://www.buymeacoffee.com/dazwilkin" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
+## Test API Server
+
+> **NOTE** `types/examples.go` revised slightly to replace `next_page_url` with `null`. Because BuyMeACoffee API uses URLs (`next_page_url`), it's more challenging to rewrite these in the client.
+
+The SDK includes a test API server (`/cmd/server`) that implements the API and return the examples values from the [API documentation](https://developers.buymeacoffee.com/#/apireference)
+
+```bash
+PORT="8080"
+ENDPOINT="0.0.0.0:${PORT}
+
+go run ./cmd/server \
+--endpoint="${ENDPOINT}"
+```
+
+Then:
+
+```bash
+PURCHASE="30"
+curl \
+--silent \
+--request GET \
+http://${ENDPOINT}/extras
+
+curl \
+--silent \
+--request GET \
+http://${ENDPOINT}/extras/${PURCHASE}
+
+SUBSCRIPTION="7979"
+curl \
+--silent \
+--request GET \
+http://${ENDPOINT}/subscriptions
+
+curl \
+--silent \
+--request GET \
+http://${ENDPOINT}/subscriptions/${SUBSCRIPTION}
+
+SUPPORTER="245731"
+curl \
+--silent \
+--request GET \
+http://${ENDPOINT}/supporters
+
+curl \
+--silent \
+--request GET \
+http://${ENDPOINT}/supporters/${SUPPORTER}
+```
