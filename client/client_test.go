@@ -2,17 +2,33 @@ package client
 
 import (
 	"log"
-	"os"
-	"strconv"
 	"testing"
 
 	"github.com/DazWilkin/go-buymeacoffee/types"
 )
 
+const (
+	testEndpoint        = "http://0.0.0.0:8080"
+	testToken    string = ""
+)
+
+func ID(env string) uint {
+	switch env {
+	case "PURCHASE":
+		return 30
+	case "SUBSCRIPTION":
+		return 7979
+	case "SUPPORTER":
+		return 245731
+	default:
+		return 0
+	}
+}
+
 // TestClientPurchases tests the client's Purchases method
 func TestClientPurchases(t *testing.T) {
-	token := os.Getenv("TOKEN")
-	c := New(token)
+	c := New(testToken)
+	c.Endpoint = testEndpoint
 
 	purchases, err := c.Purchases()
 	if err != nil {
@@ -26,15 +42,12 @@ func TestClientPurchases(t *testing.T) {
 
 // TestClientPurchase tests the client's Purchase method
 func TestClientPurchase(t *testing.T) {
-	token := os.Getenv("TOKEN")
-	purchaseID, err := strconv.ParseUint(os.Getenv("PURCHASE"), 10, 32)
-	if err != nil {
-		t.Fatal(err)
-	}
+	c := New(testToken)
+	c.Endpoint = testEndpoint
 
-	c := New(token)
+	ID := ID("PURCHASE")
 
-	purchase, err := c.Purchase(uint(purchaseID))
+	purchase, err := c.Purchase(ID)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -44,8 +57,8 @@ func TestClientPurchase(t *testing.T) {
 
 // TestClientSupporters tests the client's Supporters method
 func TestClientSupporters(t *testing.T) {
-	token := os.Getenv("TOKEN")
-	c := New(token)
+	c := New(testToken)
+	c.Endpoint = testEndpoint
 
 	supporters, err := c.Supporters()
 	if err != nil {
@@ -59,15 +72,12 @@ func TestClientSupporters(t *testing.T) {
 
 // TestClientSupporter tests the client's Supporter method
 func TestClientSupporter(t *testing.T) {
-	token := os.Getenv("TOKEN")
-	supporterID, err := strconv.ParseUint(os.Getenv("SUPPORTER"), 10, 32)
-	if err != nil {
-		t.Fatal(err)
-	}
+	c := New(testToken)
+	c.Endpoint = testEndpoint
 
-	c := New(token)
+	ID := ID("SUPPORTER")
 
-	supporter, err := c.Supporter(uint(supporterID))
+	supporter, err := c.Supporter(ID)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,8 +87,8 @@ func TestClientSupporter(t *testing.T) {
 
 // TestClientSubscriptions tests the client's Subscriptions method
 func TestClientSubscriptions(t *testing.T) {
-	token := os.Getenv("TOKEN")
-	c := New(token)
+	c := New(testToken)
+	c.Endpoint = testEndpoint
 
 	subscriptions, err := c.Subscriptions(types.All)
 	if err != nil {
@@ -92,15 +102,12 @@ func TestClientSubscriptions(t *testing.T) {
 
 // TestClientSubscription tests the client's Subscription method
 func TestClientSubscription(t *testing.T) {
-	token := os.Getenv("TOKEN")
-	subscriptionID, err := strconv.ParseUint(os.Getenv("SUBSCRIPTION"), 10, 32)
-	if err != nil {
-		t.Fatal(err)
-	}
+	c := New(testToken)
+	c.Endpoint = testEndpoint
 
-	c := New(token)
+	ID := ID("SUBSCRIPTION")
 
-	subscription, err := c.Subscription(uint(subscriptionID))
+	subscription, err := c.Subscription(ID)
 	if err != nil {
 		t.Fatal(err)
 	}
