@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	xurl "net/url"
 
@@ -11,25 +12,37 @@ import (
 )
 
 const (
-	base string = "https://developers.buymeacoffee.com/api/v1"
+	endpoint string = "https://developers.buymeacoffee.com/api/v1"
 )
 
 // Client is a type that represents an HTTP client of Buy Me A Coffee API
 type Client struct {
-	Token  string
-	client *http.Client
+	Endpoint string
+	Token    string
+	client   *http.Client
 }
 
 // New is a function that creates a new Client
 func New(token string) Client {
 	return Client{
-		Token:  token,
-		client: &http.Client{},
+		Endpoint: endpoint,
+		Token:    token,
+		client:   &http.Client{},
 	}
 }
 
 // Do is a method that wraps the http.Do method for this client
 func (c *Client) Do(url string) ([]byte, error) {
+	// For testing, the url provided may result from NextPageURL
+	// And **not** match the Client's Endpoint
+	// Check for this discrepancy
+	l := len(c.Endpoint)
+	if len(url) >= l {
+		if url[0:l] != c.Endpoint {
+			log.Printf("Discrepancy between URL (%s) and client's endpoint (%s)", url, c.Endpoint)
+		}
+	}
+
 	rqst, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return []byte{}, err
@@ -47,7 +60,7 @@ func (c *Client) Do(url string) ([]byte, error) {
 
 // Purchase is a method that given a purchase ID returns a purchase
 func (c *Client) Purchase(ID uint) (types.Purchase, error) {
-	url := fmt.Sprintf("%s/extras/%d", base, ID)
+	url := fmt.Sprintf("%s/extras/%d", c.Endpoint, ID)
 
 	purchase := types.Purchase{}
 
@@ -66,7 +79,7 @@ func (c *Client) Purchase(ID uint) (types.Purchase, error) {
 
 // Purchases is a method that returns a list of purchases
 func (c *Client) Purchases() ([]types.Purchase, error) {
-	url := fmt.Sprintf("%s/extras", base)
+	url := fmt.Sprintf("%s/extras", c.Endpoint)
 
 	pp := []types.Purchase{}
 
@@ -98,7 +111,7 @@ func (c *Client) Purchases() ([]types.Purchase, error) {
 
 // Subscription is a method that given a subscription ID returns a subscription
 func (c *Client) Subscription(ID uint) (types.Subscription, error) {
-	url := fmt.Sprintf("%s/subscription/%d", base, ID)
+	url := fmt.Sprintf("%s/subscriptions/%d", c.Endpoint, ID)
 
 	subscription := types.Subscription{}
 
@@ -121,7 +134,7 @@ func (c *Client) Subscriptions(status types.Status) ([]types.Subscription, error
 	v.Add("status", status.String())
 	querystring := v.Encode()
 
-	url := fmt.Sprintf("%s/subscriptions?%s", base, querystring)
+	url := fmt.Sprintf("%s/subscriptions?%s", c.Endpoint, querystring)
 
 	ss := []types.Subscription{}
 
@@ -154,7 +167,7 @@ func (c *Client) Subscriptions(status types.Status) ([]types.Subscription, error
 
 // Supporter is a method that given a supporter ID returns a supporter
 func (c *Client) Supporter(ID uint) (types.Supporter, error) {
-	url := fmt.Sprintf("%s/supporters/%d", base, ID)
+	url := fmt.Sprintf("%s/supporters/%d", c.Endpoint, ID)
 
 	supporter := types.Supporter{}
 
@@ -172,7 +185,7 @@ func (c *Client) Supporter(ID uint) (types.Supporter, error) {
 
 // Supporters is a method that returns a list of supporters
 func (c *Client) Supporters() ([]types.Supporter, error) {
-	url := fmt.Sprintf("%s/supporters", base)
+	url := fmt.Sprintf("%s/supporters", c.Endpoint)
 
 	// Return value
 	ss := []types.Supporter{}
