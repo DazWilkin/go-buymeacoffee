@@ -8,7 +8,7 @@ import (
 // TestExamplePuchases tests whether the API documentation's example subscriptions unmarshal correctly to the Purchases type
 func TestExamplePuchases(t *testing.T) {
 	purchases := &Purchases{}
-	if err := json.Unmarshal(examplePurchases, purchases); err != nil {
+	if err := json.Unmarshal(ExamplePurchases, purchases); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -16,7 +16,7 @@ func TestExamplePuchases(t *testing.T) {
 // TestExamplePurchase tests whether the API documentation's example purchase unmarshals correctly
 func TestExamplePurchase(t *testing.T) {
 	purchase := &Purchase{}
-	if err := json.Unmarshal(examplePurchase, purchase); err != nil {
+	if err := json.Unmarshal(ExamplePurchase, purchase); err != nil {
 		t.Fatal(err)
 	}
 }
