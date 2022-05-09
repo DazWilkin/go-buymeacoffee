@@ -2,8 +2,11 @@ package types
 
 // Using the examples on the API Documentation
 // https://developers.buymeacoffee.com/#/apireference
+// Replaced all next_page_url with null
+// Because these are URLs and include scheme://host:path they break the test server
+// Which wants URLs of the form e.g. http://localhost:8080/
 var (
-	examplePurchase = []byte(`{
+	ExamplePurchase = []byte(`{
 		"purchase_id": 2621,
 		"purchased_on": "2020-08-05 09:38:26",
 		"purchase_updated_on": "2020-08-05 09:38:26",
@@ -30,7 +33,7 @@ var (
 		  "reward_order": 0
 		}
 	  }`)
-	examplePurchases = []byte(`{
+	ExamplePurchases = []byte(`{
 		"current_page": 1,
 		"data": [
 		 
@@ -100,7 +103,7 @@ var (
 		"to": 4,
 		"total": 4
 	  }`)
-	exampleSubscription = []byte(`{
+	ExampleSubscription = []byte(`{
 		"subscription_id": 7979,
 		"subscription_cancelled_on": null,
 		"subscription_created_on": "2020-06-03 05:25:03",
@@ -122,7 +125,7 @@ var (
 		"payer_name": "rfy8jzy0yo"
 	  }
 	  `)
-	exampleSubscriptions = []byte(`{
+	ExampleSubscriptions = []byte(`{
 		"current_page": 1,
 		"data": [
 			{
@@ -152,14 +155,14 @@ var (
 		"from": 1,
 		"last_page": 36,
 		"last_page_url": "https://developers.buymeacoffee.com/api/v1/subscriptions?page=36",
-		"next_page_url": "https://developers.buymeacoffee.com/api/v1/subscriptions?page=2",
+		"next_page_url": null,
 		"path": "https://developers.buymeacoffee.com/api/v1/subscriptions",
 		"per_page": 5,
 		"prev_page_url": null,
 		"to": 5,
 		"total": 179
 	}`)
-	exampleSupporter = []byte(`{
+	ExampleSupporter = []byte(`{
 		"support_id": 245731,
 		"support_note": null,
 		"support_coffees": 1,
@@ -180,7 +183,7 @@ var (
 		"payment_platform": "paypal",
 		"payer_name": "Quip Fora"
 	  }`)
-	exampleSupporters = []byte(`{
+	ExampleSupporters = []byte(`{
 		"current_page": 1,
 		"data": [
 		  {
@@ -293,7 +296,7 @@ var (
 		"from": 1,
 		"last_page": 2,
 		"last_page_url": "https://developers.buymeacoffee.com/api/v1/supporters?page=2",
-		"next_page_url": "https://developers.buymeacoffee.com/api/v1/supporters?page=2",
+		"next_page_url": null,
 		"path": "https://developers.buymeacoffee.com/api/v1/supporters",
 		"per_page": 5,
 		"prev_page_url": null,
