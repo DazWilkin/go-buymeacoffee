@@ -1,11 +1,5 @@
 package types
 
-import (
-	"bytes"
-	"fmt"
-	"text/tabwriter"
-)
-
 // Status is a type that represents the possible values for the API's Subscriptions status
 type Status int
 
@@ -31,26 +25,6 @@ func (s Status) String() string {
 type Subscriptions struct {
 	Page
 	Data []Subscription `json:"data"`
-}
-
-// Text is a method that converts a slice of Supporters into tabbed output
-func SubscriptionsToText(ss []Subscription) string {
-	var b bytes.Buffer
-	w := tabwriter.NewWriter(&b, 0, 0, 1, ' ', 0)
-	fmt.Fprintln(w, "ID\tName\tEmail")
-	for _, s := range ss {
-		fmt.Fprintf(w, "%d\t%s\t%s\n",
-			s.ID,
-			s.PayerName,
-			s.PayerEmail,
-		)
-	}
-	if err := w.Flush(); err != nil {
-		// TODO(dazwilkin) Avoid CWE-703 unhandled error
-		return ""
-	}
-
-	return b.String()
 }
 
 // Subscription is a type that represents the JSON type returned by the API's subscription method
