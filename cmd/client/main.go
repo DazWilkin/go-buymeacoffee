@@ -1,25 +1,39 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
 	"strconv"
 
 	"github.com/DazWilkin/go-buymeacoffee/client"
+	"github.com/DazWilkin/go-buymeacoffee/text"
 	"github.com/DazWilkin/go-buymeacoffee/types"
 )
 
-func main() {
+var (
+	token = flag.String("token", "", "Developer token")
+)
 
-	token := os.Getenv("TOKEN")
-	supporterID, err := strconv.ParseUint(os.Getenv("SUPPORTER"), 10, 32)
+func ID(env string) (uint, error) {
+	ID, err := strconv.ParseUint(os.Getenv(env), 10, 32)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
-	c := client.New(token)
+	return uint(ID), nil
+}
+func main() {
+	flag.Parse()
 
+	if *token == "" {
+		log.Fatal("Flag `--token` is required")
+	}
+
+	c := client.New(*token)
+
+	// Supports
 	{
 		supporters, err := c.Supporters()
 		if err != nil {
@@ -27,17 +41,25 @@ func main() {
 		}
 
 		if len(supporters) != 0 {
-			fmt.Println(types.SupportersToText(supporters))
+			fmt.Println(text.Supporters(supporters))
 		}
 	}
+
+	// Supporter requires `SUPPORTER`
 	{
-		supporter, err := c.Supporter(uint(supporterID))
+		ID, err := ID("SUPPORTER")
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		log.Printf("%+v", supporter.ID)
+		supporter, err := c.Supporter(ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Printf("%+v\n", supporter.ID)
 	}
+	// Subscriptions
 	{
 		subscriptions, err := c.Subscriptions(types.All)
 		if err != nil {
@@ -45,7 +67,49 @@ func main() {
 		}
 
 		if len(subscriptions) != 0 {
-			fmt.Println(types.SubscriptionsToText(subscriptions))
+			fmt.Println(text.Subscriptions(subscriptions))
 		}
+	}
+
+	// Subscription requires `SUBSCRIPTION`
+	{
+		ID, err := ID("SUBSCRIPTION")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		subscription, err := c.Subscription(ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Printf("%+v\n", subscription.ID)
+	}
+
+	// Purchases
+	{
+		purchases, err := c.Purchases()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if len(purchases) != 0 {
+			fmt.Println(text.Purchases(purchases))
+		}
+	}
+
+	// Purchase requires `PURCHASE`
+	{
+		ID, err := ID("PURCHASER")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		purchase, err := c.Purchase(ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Printf("%+v\n", purchase.ID)
 	}
 }
