@@ -1,5 +1,7 @@
 # Go SDK for (most) of [Buy Me A Coffee](https://www.buymeacoffee.com) [API](https://developers.buymeacoffee.com/#/apireference)
 
+[![build-containers](https://github.com/DazWilkin/go-buymeacoffee/actions/workflows/build.yml/badge.svg)](https://github.com/DazWilkin/go-buymeacoffee/actions/workflows/build.yml)
+
 You'll need a token that you can generate in the [Developer Dashboard](https://developers.buymeacoffee.com/dashboard)
 
 See [`cmd/main.go`](/cmd/main.go) or [`client/client_test.go`](/client/client_test.go) for examples
