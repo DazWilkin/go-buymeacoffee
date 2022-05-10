@@ -9,6 +9,8 @@ jobs:
   go-buymeacoffee:
     name: go-buymeacoffee
     runs-on: ubuntu-latest
+    env:
+      REPO: dazwilkin/go-buymeacoffee
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -28,22 +30,21 @@ jobs:
           context: .
           file: ./Dockerfile/Dockerfile.server
           build-args: |
-            TOKEN=${{ secrets.GHCR }}
             VERSION=${{ env.VERSION }}
             COMMIT=${{ github.sha }}
-          tags: ghcr.io/${{ github.repository }}-server:${{ github.sha }}
+          tags: ghcr.io/${{ env.REPO }}-server:${{ github.sha }}
           push: true
       - name: revise occurrences of the image
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Actions"
-          REPO=$( echo ${{ github.repository }} | awk -F '/' '{print $2}')
+
           for FILENAME in "./README.md"
           do
             echo "Replacing: ${REPO}-server"
             sed \
             --in-place \
-            --expression="s|${REPO}-server:[0-9a-f]\{40\}|${REPO}-server:${{ github.sha }}|g" \
+            --expression="s|${{ env.REPO }}-server:[0-9a-f]\{40\}|${{ env.REPO }}-server:${{ github.sha }}|g" \
             ${FILENAME}
             git add ${FILENAME}
           done
