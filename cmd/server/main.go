@@ -4,122 +4,98 @@ import (
 	"flag"
 	"log"
 	"net/http"
-	"strconv"
-	"strings"
+	"runtime"
+	"time"
 
 	"github.com/DazWilkin/go-buymeacoffee/types"
+
+	"github.com/gorilla/mux"
 )
 
+const (
+	homePage string = `
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <title>Buy Me A Coffee -- Test API Server</title>
+</head>
+<body>
+  <h1>Buy Me A Coffee -- Test API Server</h1>
+  <hr/>
+  <ul>
+    <li>/extras</li>
+	<li>/extras/{id}</li>
+	<li>/subscriptions</li>
+	<li>/subscriptions/{id}</li>
+	<li>/supporters</li>
+	<li>/supporters/{id}</li>
+  </ul>
+</body>
+</html>
+`
+)
+
+var (
+	// BuildTime is the time that this binary was built represented as a UNIX epoch
+	BuildTime string
+	// GitCommit is the git commit value and is expected to be set during build
+	GitCommit string
+	// GoVersion is the Golang runtime version
+	GoVersion = runtime.Version()
+	// OSVersion is the OS version (uname --kernel-release) and is expected to be set during build
+	OSVersion string
+	// StartTime is the start time of the exporter represented as a UNIX epoch
+	StartTime = time.Now().Unix()
+)
 var (
 	endpoint = flag.String("endpoint", "0.0.0.0:8080", "Endpoint of server")
 )
 
-// ExtractID is function that parses candidate URL paths (/{method}/[{ExtractID}])
-// It attempts to extract the method and an optional ExtractID
-// An ExtractID of zero represents a valid path *without* an ExtractID i.e. /{method}/
-func ExtractID(s string) (uint, error) {
-	if s == "" {
-		return 0, nil
-	}
-
-	ID, err := strconv.ParseUint(s, 10, 32)
-	if err != nil {
-		return 0, err
-	}
-
-	return uint(ID), nil
+func home(w http.ResponseWriter, _ *http.Request) {
+	w.Write([]byte(homePage))
 }
-func handler(w http.ResponseWriter, req *http.Request) {
-	// All API methods require GET
-	if req.Method != http.MethodGet {
-		w.WriteHeader(http.StatusMethodNotAllowed)
+func handleAllExtras(w http.ResponseWriter, _ *http.Request) {
+	w.Write(types.ExamplePurchases)
+}
+func handleOneExtras(w http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	ID := vars["id"]
+
+	if ID == "30" {
+		w.Write(types.ExamplePurchase)
 		return
 	}
 
-	// Valid Paths are /METHOD or /METHOD/ID
-	// Where METHOD is [purchases,subscriptions,supporters]
-	// And ID parses as an unsigned integer
-	path := req.URL.Path
-	log.Printf("method: %s", path)
+	w.WriteHeader(http.StatusNotFound)
+}
+func handleAllSubscriptions(w http.ResponseWriter, _ *http.Request) {
+	w.Write(types.ExampleSubscriptions)
+}
+func handleOneSubscriptions(w http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	ID := vars["id"]
 
-	// Examine the path by splitting it on "/"
-	parts := strings.Split(path, "/")
-	log.Printf("%d: %+v", len(parts), parts)
-
-	if len(parts) < 2 || len(parts) > 4 {
-		log.Println("Incorrect number of path components")
-		w.WriteHeader(http.StatusBadRequest)
+	if ID == "7979" {
+		w.Write(types.ExampleSubscription)
 		return
 	}
 
-	// If present, the method will always be part[1]
-	method := parts[1]
+	w.WriteHeader(http.StatusNotFound)
+}
+func handleAllSupporters(w http.ResponseWriter, _ *http.Request) {
+	w.Write(types.ExampleSupporters)
+}
+func handleOneSupporters(w http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	ID := vars["id"]
 
-	// If present and not empty, the ID will always be part[2]
-	var ID uint
-	var err error
-	if len(parts) == 3 {
-		if ID, err = ExtractID(parts[2]); err != nil {
-			log.Printf("Unable to parse ID from part [%s]", parts[2])
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-	}
-
-	// Response are always JSON
-	w.Header().Set("Content-Type", "application/json")
-
-	switch method {
-	case "extras":
-		// If there's an ID, return /extras/{ID}
-		if ID != 0 {
-			// If ID matches ExamplePurchase ID==30
-			if ID == 30 {
-				w.Write(types.ExamplePurchase)
-				return
-			}
-
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-
-		// Otherwise, return ExamplePurchases
-		w.Write(types.ExamplePurchases)
-		return
-	case "subscriptions":
-		// If there's an ID, return /subscriptions/{ID}
-		if ID != 0 {
-			// If ID matches ExampleSubscription ID==7979
-			if ID == 7979 {
-				w.Write(types.ExampleSubscription)
-				return
-			}
-
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-
-		// Otherwise, return ExampleSubscriptions
-		w.Write(types.ExampleSubscriptions)
-		return
-	case "supporters":
-		// If there's an ID, return /subscriptions/{ID}
-		if ID != 0 {
-			// If ID matches ExampleSupporter ID==245731
-			if ID == 245731 {
-				w.Write(types.ExampleSupporter)
-				return
-			}
-		}
-
-		// Otherwise, return ExampleSupporters
-		w.Write(types.ExampleSupporters)
-		return
-	default:
-		log.Println("Unrecognized API method")
-		w.WriteHeader(http.StatusMethodNotAllowed)
+	if ID == "245731" {
+		w.Write(types.ExampleSupporter)
 		return
 	}
+
+	w.WriteHeader(http.StatusNotFound)
+
 }
 
 func main() {
@@ -129,8 +105,16 @@ func main() {
 		log.Fatal("Flag `--endpoint` is required")
 	}
 
-	http.HandleFunc("/", handler)
+	r := mux.NewRouter()
 
-	log.Printf("Starting server [%s]", *endpoint)
-	log.Fatal(http.ListenAndServe(*endpoint, nil))
+	r.HandleFunc("/", home)
+	r.HandleFunc("/extras", handleAllExtras).Methods("GET")
+	r.HandleFunc("/extras/{id}", handleOneExtras).Methods("GET")
+	r.HandleFunc("/subscriptions", handleAllSubscriptions).Methods("GET")
+	r.HandleFunc("/subscriptions/{id}", handleOneSubscriptions).Methods("GET")
+	r.HandleFunc("/supporters", handleAllSupporters).Methods("GET")
+	r.HandleFunc("/supporters/{id}", handleOneSupporters).Methods("GET")
+
+	log.Printf("Starting server (%s)", *endpoint)
+	log.Println(http.ListenAndServe(*endpoint, r))
 }
