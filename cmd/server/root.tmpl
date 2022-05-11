@@ -1,0 +1,22 @@
+{{- define "content"}}
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>Buy Me A Coffee -- Test API Server</title>
+<style>
+body {
+  font-family: Roboto;
+}
+</style>
+</head>
+<body>
+  <h1>Buy Me A Coffee -- Test API Server</h1>
+  <hr/>
+  <ul>
+{{range $Key, $Val := .Handlers}}
+    <li><a href="{{ $Val }}">{{ $Key }}</a></li>
+{{end}}
+  </ul>
+</body>
+</html>
+{{end}}
