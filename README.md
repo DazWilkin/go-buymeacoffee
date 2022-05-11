@@ -2,7 +2,7 @@
 
 [![build-containers](https://github.com/DazWilkin/go-buymeacoffee/actions/workflows/build.yml/badge.svg)](https://github.com/DazWilkin/go-buymeacoffee/actions/workflows/build.yml)
 
-Image: `ghcr.io/dazwilkin/go-buymeacoffee-server:c4484ecda6686d1778ec1b6d5ee0000ae38c418b`
+Image: `ghcr.io/dazwilkin/go-buymeacoffee-server:077b6917173c981714a4e672832418f63d71a91e`
 
 You'll need a token that you can generate in the [Developer Dashboard](https://developers.buymeacoffee.com/dashboard)
 
