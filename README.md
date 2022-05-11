@@ -27,7 +27,7 @@ go run ./cmd/server \
 Then:
 
 ```bash
-PURCHASE="30"
+PURCHASE="2621"
 curl \
 --silent \
 --request GET \
