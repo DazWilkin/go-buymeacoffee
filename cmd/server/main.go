@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"runtime"
@@ -13,26 +15,9 @@ import (
 )
 
 const (
-	homePage string = `
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-  <title>Buy Me A Coffee -- Test API Server</title>
-</head>
-<body>
-  <h1>Buy Me A Coffee -- Test API Server</h1>
-  <hr/>
-  <ul>
-    <li>/extras</li>
-	<li>/extras/{id}</li>
-	<li>/subscriptions</li>
-	<li>/subscriptions/{id}</li>
-	<li>/supporters</li>
-	<li>/supporters/{id}</li>
-  </ul>
-</body>
-</html>
-`
+	purchaseID     string = "2621"
+	subscriptionID string = "7979"
+	supporterID    string = "245731"
 )
 
 var (
@@ -51,8 +36,33 @@ var (
 	endpoint = flag.String("endpoint", "0.0.0.0:8080", "Endpoint of server")
 )
 
-func home(w http.ResponseWriter, _ *http.Request) {
-	w.Write([]byte(homePage))
+// Content is a type that represents the data that is passed to the Golang Template
+type Content struct {
+	Handlers map[string]string
+}
+
+var (
+	// Define the mapping of handlers for the Golang Template
+	handlers = map[string]string{
+		"/extras":             "/extras",
+		"/extras/{id}":        fmt.Sprintf("/extras/%s", purchaseID),
+		"/subscriptions":      "/subscriptions",
+		"/subscriptions/{id}": fmt.Sprintf("/subscriptions/%s", subscriptionID),
+		"/supporters":         "/supporters",
+		"/supporters/{id}":    fmt.Sprintf("/supporters/%s", supporterID),
+	}
+	// Define the instance of Content used by handleRoot
+	content = Content{
+		Handlers: handlers,
+	}
+)
+
+func handleRoot(w http.ResponseWriter, _ *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+	t := template.Must(template.New("root.tmpl").ParseFiles("root.tmpl"))
+	if err := t.ExecuteTemplate(w, "content", content); err != nil {
+		log.Fatal(err)
+	}
 }
 func handleAllExtras(w http.ResponseWriter, _ *http.Request) {
 	w.Write(types.ExamplePurchases)
@@ -61,7 +71,7 @@ func handleOneExtras(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	ID := vars["id"]
 
-	if ID == "30" {
+	if ID == purchaseID {
 		w.Write(types.ExamplePurchase)
 		return
 	}
@@ -75,7 +85,7 @@ func handleOneSubscriptions(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	ID := vars["id"]
 
-	if ID == "7979" {
+	if ID == subscriptionID {
 		w.Write(types.ExampleSubscription)
 		return
 	}
@@ -89,7 +99,7 @@ func handleOneSupporters(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	ID := vars["id"]
 
-	if ID == "245731" {
+	if ID == supporterID {
 		w.Write(types.ExampleSupporter)
 		return
 	}
@@ -107,7 +117,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/", home)
+	r.HandleFunc("/", handleRoot)
 	r.HandleFunc("/extras", handleAllExtras).Methods("GET")
 	r.HandleFunc("/extras/{id}", handleOneExtras).Methods("GET")
 	r.HandleFunc("/subscriptions", handleAllSubscriptions).Methods("GET")
