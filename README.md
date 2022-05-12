@@ -2,15 +2,13 @@
 
 [![build-containers](https://github.com/DazWilkin/go-buymeacoffee/actions/workflows/build.yml/badge.svg)](https://github.com/DazWilkin/go-buymeacoffee/actions/workflows/build.yml)
 
+Image: `ghcr.io/dazwilkin/go-buymeacoffee-server:077b6917173c981714a4e672832418f63d71a91e`
+
 You'll need a token that you can generate in the [Developer Dashboard](https://developers.buymeacoffee.com/dashboard)
 
 See [`cmd/main.go`](/cmd/main.go) or [`client/client_test.go`](/client/client_test.go) for examples
 
 > **NOTE** The `types` aren't fully implemented.
-
-<hr/>
-<br/>
-<a href="https://www.buymeacoffee.com/dazwilkin" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 ## Test API Server
 
@@ -29,7 +27,7 @@ go run ./cmd/server \
 Then:
 
 ```bash
-PURCHASE="30"
+PURCHASE="2621"
 curl \
 --silent \
 --request GET \
@@ -62,3 +60,7 @@ curl \
 --request GET \
 http://${ENDPOINT}/supporters/${SUPPORTER}
 ```
+
+<hr/>
+<br/>
+<a href="https://www.buymeacoffee.com/dazwilkin" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
