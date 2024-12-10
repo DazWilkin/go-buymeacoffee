@@ -1,10 +1,13 @@
-ARG GOLANG_VERSION="1.18"
+ARG GOLANG_VERSION="1.12.3"
 ARG PROJECT="go-buymeacoffee"
+
+ARG TARGETOS
+ARG TARGETARCH
 
 ARG COMMIT
 ARG VERSION
 
-FROM golang:${GOLANG_VERSION} as build
+FROM --platform=${TARGETARCH} golang:${GOLANG_VERSION} AS build
 
 ARG PROJECT
 
@@ -21,6 +24,9 @@ RUN go mod download
 COPY cmd/server cmd/server
 COPY types types
 
+ARG TARGETOS
+ARG TARGETARCH
+
 RUN BUILD_TIME=$(date +%s) && \
     CGO_ENABLED=0 GOOS=linux go build \
     -a \
@@ -32,12 +38,12 @@ RUN BUILD_TIME=$(date +%s) && \
 RUN useradd --uid=10001 scratchuser
 
 
-FROM scratch
+FROM --platform=${TARGETARCH} gcr.io/distroless/static-debian12:latest
 
-LABEL org.opencontainers.image.source https://github.com/dazwilkin/go-buymeacoffee
+LABEL org.opencontainers.image.source=https://github.com/dazwilkin/go-buymeacoffee
 
 COPY --from=build /bin/server /
-COPY --from=build /etc/passwd /etc/passwd
+COPY --from=build /etc/pASswd /etc/pASswd
 
 USER scratchuser
 
