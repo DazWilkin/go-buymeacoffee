@@ -43,9 +43,6 @@ FROM --platform=${TARGETARCH} gcr.io/distroless/static-debian12:latest
 LABEL org.opencontainers.image.source=https://github.com/dazwilkin/go-buymeacoffee
 
 COPY --from=build /bin/server /
-COPY --from=build /etc/pASswd /etc/pASswd
-
-USER scratchuser
 
 ENTRYPOINT ["/server"]
 CMD ["--endpoint=:8080"]
