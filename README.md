@@ -10,6 +10,24 @@ See [`cmd/main.go`](/cmd/main.go) or [`client/client_test.go`](/client/client_te
 
 > **NOTE** The `types` aren't fully implemented.
 
+## [Sigstore](https://www.sigstore.dev/)
+
+`go-buymeacoffee` container images are being signed by Sigstore and may be verified:
+
+```bash
+cosign verify \
+--key=./cosign.pub \
+ghcr.io/dazwilkin/go-buymeacoffee:1234567890123456789012345678901234567890
+```
+
+NOTE `cosign.pub` may be downloaded [here](./cosign.pub)
+
+To install cosign, e.g.:
+
+```bash
+go install github.com/sigstore/cosign/cmd/cosign@latest
+```
+
 ## Test API Server
 
 > **NOTE** `types/examples.go` revised slightly to replace `next_page_url` with `null`. Because BuyMeACoffee API uses URLs (`next_page_url`), it's more challenging to rewrite these in the client.
