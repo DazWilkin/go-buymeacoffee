@@ -3,7 +3,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	xurl "net/url"
@@ -55,7 +55,7 @@ func (c *Client) Do(url string) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }
 
 // Purchase is a method that given a purchase ID returns a purchase

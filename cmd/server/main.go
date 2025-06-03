@@ -65,42 +65,54 @@ func handleRoot(w http.ResponseWriter, _ *http.Request) {
 	}
 }
 func handleAllExtras(w http.ResponseWriter, _ *http.Request) {
-	w.Write(types.ExamplePurchases)
+	if _, err := w.Write(types.ExamplePurchases); err != nil {
+		log.Printf("unable to write ExamplePurchases: %v", err)
+	}
 }
 func handleOneExtras(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	ID := vars["id"]
 
 	if ID == purchaseID {
-		w.Write(types.ExamplePurchase)
+		if _, err := w.Write(types.ExamplePurchase); err != nil {
+			log.Printf("unable to write ExamplePurchase: %v", err)
+		}
 		return
 	}
 
 	w.WriteHeader(http.StatusNotFound)
 }
 func handleAllSubscriptions(w http.ResponseWriter, _ *http.Request) {
-	w.Write(types.ExampleSubscriptions)
+	if _, err := w.Write(types.ExampleSubscriptions); err != nil {
+		log.Printf("unable to write ExampleSubscriptions: %v", err)
+	}
 }
 func handleOneSubscriptions(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	ID := vars["id"]
 
 	if ID == subscriptionID {
-		w.Write(types.ExampleSubscription)
+		if _, err := w.Write(types.ExampleSubscription); err != nil {
+			log.Printf("unable to write ExampleSubscription: %v", err)
+		}
 		return
 	}
 
 	w.WriteHeader(http.StatusNotFound)
 }
 func handleAllSupporters(w http.ResponseWriter, _ *http.Request) {
-	w.Write(types.ExampleSupporters)
+	if _, err := w.Write(types.ExampleSupporters); err != nil {
+		log.Printf("unable to write ExampleSupporters: %v", err)
+	}
 }
 func handleOneSupporters(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	ID := vars["id"]
 
 	if ID == supporterID {
-		w.Write(types.ExampleSupporter)
+		if _, err := w.Write(types.ExampleSupporter); err != nil {
+			log.Printf("unable to write ExampleSupporter: %v", err)
+		}
 		return
 	}
 
