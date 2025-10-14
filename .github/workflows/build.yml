@@ -3,6 +3,13 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - '**.md'
+      - '**.json'
+      - '**.jsonnet'
+      - '**.key'
+      - '**.pub'
+      - '**.sh'
 jobs:
   golangci:
     name: lint
