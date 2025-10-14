@@ -72,7 +72,7 @@ jobs:
           --annotations="workflow=${{ github.workflow }}" \
           --annotations="commit=${{ github.sha }}" \
           --annotations="version=${{ env.VERSION }}" \
-          ghcr.io/${{ env.REPO }}@${DIGEST}
+          ghcr.io/${{ env.REPO }}-server@${DIGEST}
         env:
           COSIGN_PASSWORD: ""
       - name: Revise image references
